@@ -86,8 +86,15 @@ func (u *UrlPair) GenerateNewUrl(req *http.Request, db *sql.DB) error {
 	}
 	url := u.OgUrl
 
+	rows,_:=db.Query("SELECT newurl FROM urlpair WHERE ogurl=? LIMIT 1",url) //to check if url alreday exists in db
+	if rows.Next(){
+		rows.Scan(&u.NewUrl)
+		return nil
+	}
 	newurl := generate_code(4)
 	u.NewUrl = newurl
+
+
 
 	_, err := db.Exec("INSERT INTO urlpair (ogurl, newurl) VALUES (?, ?)", url, newurl)
 
