@@ -55,12 +55,12 @@ templ ResultPage(newUrl string) {
                                 <div class="mb-3">
                                     <label class="form-label">Your shortened URL:</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" value={"http://localhost:8000" + newUrl} readonly/>
+                                        <input type="text" class="form-control" value={"https://url-shortner-0vq3.onrender.com" + newUrl} readonly/>
                                         <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard()">Copy</button>
                                     </div>
                                 </div>
                                 <div class="d-grid gap-2">
-                                    <a href={templ.SafeURL("http://localhost:8000" + newUrl)} class="btn btn-primary" target="_blank">Visit URL</a>
+                                    <a href={templ.SafeURL("https://url-shortner-0vq3.onrender.com" + newUrl)} class="btn btn-primary" target="_blank">Visit URL</a>
                                     <a href="/" class="btn btn-secondary">Shorten Another URL</a>
                                 </div>
                             </div>
