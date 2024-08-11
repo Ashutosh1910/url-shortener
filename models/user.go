@@ -1,21 +1,16 @@
 package models
 
-type Hash struct{
+type Hash struct {
 	Code string
 }
 
-type  User struct{
-	ID int
-	Name string
+type User struct {
+	ID       int
+	Name     string
 	Passowrd Hash
-	IsAdmin bool
-	Active bool
-
-
-
-
+	IsAdmin  bool
+	Active   bool
 }
-
 
 // func encrypt_password(password string) Hash{
 
@@ -45,4 +40,3 @@ type  User struct{
 // func FindUserByName(name string)*User{
 
 // }
-

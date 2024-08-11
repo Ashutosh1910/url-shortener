@@ -14,22 +14,19 @@ import (
 	///"github.com/Ashutosh1910/url-shortner/templates"
 )
 
+func main() {
 
-
-func main(){
-	
-
-	router:=shortner.NewRouter()
+	router := shortner.NewRouter()
 	db, err := sql.Open("sqlite3", "./urls.db")
 	//db.SetMaxOpenConns(1)
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer db.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
 
-	router.Service=&shortner.ShortnerService{Db:db}
-	models.MigrateUrlPair(db);
+	router.Service = &shortner.ShortnerService{Db: db}
+	models.MigrateUrlPair(db)
 	fmt.Println("Server is Running")
-	log.Fatalln(http.ListenAndServe(":8000",router))
-	
+	log.Fatalln(http.ListenAndServe(":8000", router))
+
 }
