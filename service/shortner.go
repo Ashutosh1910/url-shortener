@@ -3,6 +3,8 @@ package shortner
 import (
 	"database/sql"
 	"fmt"
+	"log"
+
 	//"fmt"
 	_ "log"
 	"net/http"
@@ -52,12 +54,15 @@ func (s *ShortnerService)Shorten(w http.ResponseWriter, req *http.Request){
 	oldUrl:=req.FormValue("name")
 	fmt.Println(oldUrl)
 	urlpair:=&models.UrlPair{OgUrl: oldUrl}
-	urlpair.GenerateNewUrl(req,s.Db)
+	err:=urlpair.GenerateNewUrl(req,s.Db)
+	if err!=nil{
+		templates.ResultPage("Invalid Url").Render(req.Context(),w)
+		return}
 	// if err!=nil{
 	// 	log.Fatalln(err)
 	// }
-	newurlpair,_:=models.FindUrlPair(s.Db,oldUrl)
-	component:=templates.ResultPage(newurlpair.NewUrl)
+	//newurlpair,_:=models.FindUrlPair(s.Db,oldUrl)
+	component:=templates.ResultPage(urlpair.NewUrl)
 	component.Render(req.Context(),w)
  
 }
@@ -66,6 +71,7 @@ func (s *ShortnerService)HomeForm(w http.ResponseWriter, req *http.Request){
 
 	component:=templates.FormPage()
 	component.Render(req.Context(),w)
+	
 
 }
 
@@ -73,6 +79,9 @@ func (s *ShortnerService)HomeForm(w http.ResponseWriter, req *http.Request){
 func (s *ShortnerService)FindHandler(w http.ResponseWriter, req *http.Request){
 
 	rows,err:=s.Db.Query("SELECT ogurl FROM urlpair WHERE newurl= ? LIMIT 1",req.URL.Path)
+	if err!=nil{
+		log.Fatal(err)
+	}
 	defer rows.Close()
 	
 	fmt.Println(req.URL.Path)

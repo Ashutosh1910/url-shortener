@@ -2,9 +2,12 @@ package models
 
 import (
 	//"context"
-	"math/rand"
+	//	"crypto/aes"
 	"database/sql"
-	"fmt"
+	"errors"
+	"math/rand"
+
+	//"fmt"
 	//"io"
 	"log"
 	//"math"
@@ -55,9 +58,15 @@ func FindUrlPair(db *sql.DB,url string) (*UrlPair,error){
 // func (u *UrlPair) Save(){
 
 // }
-// func (u *UrlPair) IsValidUrl() bool{
-	
-// }
+func (u *UrlPair) IsValidUrl() bool{
+
+	url:=u.OgUrl
+
+	if url[:8]=="https://" && len(strings.Split(url, "."))>=2{
+		return true
+	}
+	return false
+}
 func generate_code(length int) string{ 
 	letters:="a b c d e f g h i j k l m n o p q r s t u v w x y z "
 	letters_slice:=strings.Split(letters," ")
@@ -70,9 +79,15 @@ func generate_code(length int) string{
 	return "/"+path+"/"
 }
 
-func (u *UrlPair) GenerateNewUrl(req *http.Request,db *sql.DB) {
+func (u *UrlPair) GenerateNewUrl(req *http.Request,db *sql.DB) error {
+	if !u.IsValidUrl(){
+		// var w http.ResponseWriter
+		// http.Error(w,"Invalid url",400)
+		return errors.New("Invalid Url")
 
+	}
 	url:=u.OgUrl
+
 
 	newurl:=generate_code(4)
 	u.NewUrl=newurl
@@ -83,8 +98,9 @@ func (u *UrlPair) GenerateNewUrl(req *http.Request,db *sql.DB) {
 	//fmt.Println(affected)
 
 	if err!=nil{
-		fmt.Println(err)
+		log.Fatal(err)
 	}
+	return nil
 
 }
 
